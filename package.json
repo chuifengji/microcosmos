@@ -1,0 +1,25 @@
+{
+  "name": "microcosmos",
+  "version": "0.1.0",
+  "description": "a micro front end frame written for fun",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chuifengji/microcosmos.git"
+  },
+  "keywords": [
+    "microfrontend",
+    "frame",
+    "frontend"
+  ],
+  "author": "EthanLv",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chuifengji/microcosmos/issues"
+  },
+  "homepage": "https://github.com/chuifengji/microcosmos#readme",
+  "dependencies": {}
+}
