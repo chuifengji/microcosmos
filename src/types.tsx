@@ -3,7 +3,7 @@ export type appConfigMatch = Array<{
     name: string,
     entry: string,
     container: string,
-    matchRouter: string,//应当可设置为‘/’根路径
+    matchRouter: string,//应当可设置为根路径“/”
 }>
 
 //直接加载，不匹配路由
@@ -19,7 +19,7 @@ declare global {
             name: string,
             entry: string,
             container: string,
-            matchRouter?: string,//应当可设置为‘/’根路径
+            matchRouter?: string,
         }>
     }
 }

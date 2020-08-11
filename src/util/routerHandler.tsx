@@ -1,3 +1,9 @@
+import { loadHtml } from "../htmlLoader/htmlLoader"
+
 export function routerChange() {
-    console.log(location.hash)
+    window.appList.forEach(item => {
+        if (item.matchRouter === location.hash) {
+            loadHtml(item.entry, item.container)
+        }
+    })
 }
