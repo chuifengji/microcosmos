@@ -1,4 +1,4 @@
-
+//memorize: 函数缓存
 export function memorize(fn: Function) {
     const cache: any = {};
     return function ([...args]) {

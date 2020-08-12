@@ -1,5 +1,5 @@
-import { appConfigMatch, appConfigDefaultLoad } from "./types"
-import { routerChange } from "./util/routerHandler"
+import { appConfigMatch, appConfigDefaultLoad } from "./util/types"
+import { routerChange } from "./router/routerHandler"
 import { loadHtml } from "./htmlLoader/htmlLoader"
 window.appList = [];
 export function register(apps: appConfigMatch) {

@@ -5,9 +5,3 @@ export function request(url: string, options?: RequestInit): Promise<string> {
     }
     return fetch(url, { mode: 'cors', ...options }).then((res) => res.text())
 }
-
-// async function ss() {
-//     let aa = await getHtml('http://localhost:3000/');
-//     console.log(aa)
-// }
-// ss()

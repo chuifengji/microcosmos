@@ -20,6 +20,10 @@ declare global {
             entry: string,
             container: string,
             matchRouter?: string,
+            bootstrap?: Function,
+            mount?: Function,
+            unmount?: Function,
+            update?: Function
         }>
     }
 }
