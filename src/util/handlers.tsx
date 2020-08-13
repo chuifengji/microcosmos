@@ -1,5 +1,5 @@
 //memorize: 函数缓存
-export function memorize(fn: Function) {
+export function memorize(fn: Function): any {
     const cache: any = {};
     return function ([...args]) {
         const _args = JSON.stringify(args)

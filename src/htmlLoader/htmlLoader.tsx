@@ -1,6 +1,7 @@
 import { RE_LABEL_STYLE, RE_LABEL_SCRIPT, RE_LABEL_LINK, RE_LABEL_META, RE_LABEL_BODY, RE_LABEL_HEAD } from "./regex"
 import { request } from "../util/request"
 import { memorize } from "../util/handlers"
+import { sandbox } from "../sandbox/sandbox"
 //loadHtml 载入html到app定义的容器中
 export async function reHtml(url: string): Promise<string> {
     let html = await request(url),

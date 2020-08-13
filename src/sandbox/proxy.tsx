@@ -19,7 +19,7 @@ function getTarget(draftState: any) {
     return draftState.mutated ? draftState.draftValue : draftState.originalValue;
 }
 
-export const createProxy = (proxyTarget: { [key: string]: any }, onWrite: Function) => {
+export function createProxy(proxyTarget: { [key: string]: any }, onWrite: any, appName?: string) {
     const draftValue = isArray(proxyTarget) ? [] : getCleanCopy(proxyTarget);
     let draftState = {
         originalValue: proxyTarget,
@@ -95,3 +95,4 @@ export const createProxy = (proxyTarget: { [key: string]: any }, onWrite: Functi
         }
     })
 }
+

@@ -1,8 +1,11 @@
-export const sanbox = (
+import { createProxy } from "./proxy";
+import { memorize } from "../util/handlers"
+
+export function runScript(
     script: string,
     appName: string,
     proxyEnvir: any,//TODO:需要类型增强
-) => {
+) {
     const execscript: string =
         `with(proxyEnvir.INTERNAL_STATE_KEY){${script} 
          return proxyEnvir['${appName}']}`
@@ -14,3 +17,10 @@ export const sanbox = (
         throw err
     }
 }
+
+export function sandbox(script: string, appName: string) {
+    let createSandbox = memorize(createProxy),
+        proxyEnvir = createSandbox(window as any, null, appName);
+    runScript(script, appName, proxyEnvir);
+}
+
