@@ -38,8 +38,8 @@ function getCleanCopy(obj) {
 function patchEventListener(event, ListerName) {
     return function () {
         const e = new Event(ListerName);
+        event.apply(this, arguments);
         window.dispatchEvent(e);
-        return event.apply(this, arguments);
     };
 }
 
@@ -227,7 +227,7 @@ async function loadHtml(ct, url, appName) {
 }
 
 function routerChange() {
-    console.log("调用了");
+    console.log(window.history.state);
     window.appList.forEach(item => {
         if (item.matchRouter === window.location.hash) {
             loadHtml(item.container, item.entry, item.name);

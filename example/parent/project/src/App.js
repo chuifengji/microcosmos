@@ -5,7 +5,7 @@ import './App.css';
 function App() {
   function goto(title, href) {
     console.log("title", title, "href", href)
-    window.history.pushState({}, title, href);
+    window.history.pushState(href, title, href);
   }
   return (
     <div className="App">

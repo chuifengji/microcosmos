@@ -38,7 +38,8 @@ export function getCleanCopy(obj: Object) {
 export function patchEventListener(event: any, ListerName: string) {
     return function (this: any) {
         const e = new Event(ListerName);
-        window.dispatchEvent(e);
-        return event.apply(this, arguments)
+        event.apply(this, arguments)
+        window.dispatchEvent(e);//TODO：事件广播发生在history state改变之前，数据不同步。函数不纯导致的问题么，害。
     };
 }
+
