@@ -43,7 +43,7 @@ export async function loadHtml(ct: string, url: string, appName: string) {
     let getHtml = memorize(reHtml),
         [result, scriptsArray] = await getHtml(url),
         container = document.getElementById(ct);
-    if (!container) { throw Error('the div tag with id' + ct + 'does not exist!') } else {
+    if (!container) { throw Error('the div tag with id ' + appName + ' does not exist!') } else {
         container.innerHTML = result;
         scriptsArray.map((item: string) => { sandbox(item, appName); })
     }

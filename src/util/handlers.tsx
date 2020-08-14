@@ -34,3 +34,11 @@ export function isrefType(value: any): boolean {
 export function getCleanCopy(obj: Object) {
     return Object.create(Object.getPrototypeOf(obj));
 }
+//patchEventListener 改变全局事件状态
+export function patchEventListener(event: any, ListerName: string) {
+    return function (this: any) {
+        const e = new Event(ListerName);
+        window.dispatchEvent(e);
+        return event.apply(this, arguments)
+    };
+}
