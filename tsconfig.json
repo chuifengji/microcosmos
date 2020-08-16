@@ -4,7 +4,7 @@
     "sourceMap": true,
     "declaration": true,
     "declarationDir": "dist/types/",
-    "noImplicitAny": true,
+    "noImplicitAny": false, //编译器无法判定变量类型时将用any来代替
     "target": "es2017",
     "module": "esnext",
     "moduleResolution": "node",

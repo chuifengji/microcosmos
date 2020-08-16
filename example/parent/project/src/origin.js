@@ -1,10 +1,3 @@
-const RE_LABEL_SCRIPT_CONTENT = new RegExp(/(?<=<script[\s\S]*>)([\s\S]+)(?=<\/script>)/g);
-const RE_LABEL_BODY = new RegExp(/(?<=<body[\s\S]*>)([\s\S]+)(?=<\/body>)/g);
-const RE_LABEL_SCRIPT_URL = new RegExp(/(?<=<script.*src=("|'))(.+)(?=("|')>([\s\S]*)<\/script>)/g);
-const RE_LABEL_SCRIPT = new RegExp(/<\s*script([\s\S]+)>([^>]*)<\s*\/script>/g);
-const RE_LABEL_HEAD_CONTENT = new RegExp(/(?<=<head[\s\S]*>)([\s\S]+)(?=<\/head>)/g);
-const RE_SCRIPT_URL_OUTER = new RegExp(/\/\//);
-
 function request(url, options) {
     if (!window.fetch) {
         throw Error("It looks like that your browser doesn't support fetch. Polyfill is needed before you use it.");
@@ -185,33 +178,24 @@ function sandbox(script, appName) {
     runScript(script, appName, proxyEnvir);
 }
 
-async function reHtml(url) {
-    let html = await request(url), period, head = '', body = '', result = '', urlArray = [], scriptsArray = [];
-    console.log(html)
-    while ((period = RE_LABEL_SCRIPT_URL.exec(html)) != null) {
-        console.log(period)
-        RE_SCRIPT_URL_OUTER.test(period) ? urlArray.push(period)
-            : urlArray.push(url + period); //同域和不同域处理方式不同
-    }
-    // console.log(urlArray)
-    urlArray.forEach(async (item) => {
-        scriptsArray.push(await requestScript(item));
-    });
-    while ((period = RE_LABEL_SCRIPT_CONTENT.exec(html)) != null) {
-        scriptsArray.push(period[1].trim() + "\n");
-    }
-    html = html.replace(RE_LABEL_SCRIPT, `<!-- this script is replaced and run in sandbox-->`);
-    head = RE_LABEL_HEAD_CONTENT.exec(html).toString() + "\n";
-    body = RE_LABEL_BODY.exec(html).toString();
-    result = head + body;
+async function parseHtml(url, appName) {
+    let iframe = document.createElement('iframe');
+    iframe.setAttribute('src', url);
+    iframe.setAttribute('name', appName);
+    let div = document.createElement('div');
+    div.style.display = 'none';
+    div.appendChild(iframe);
+    document.body.appendChild(div);
+    let scriptsArray = [], result, root = await iframeReady(iframe, appName), [scriptUrls, scripts] = parseScript(root.documentElement);
+    console.log(root, 's')
+    scriptUrls.forEach(async (item) => { scriptsArray.push(await request(item)); });
+    scripts.forEach(async (item) => { scriptsArray.push(item); });
+    result = root.head.outerHTML + root.body.outerHTML;
+    console.log(result, scriptsArray)
     return [result, scriptsArray];
 }
-async function requestScript(url) {
-    return await request(url);
-}
 async function loadHtml(ct, url, appName) {
-    let getHtml = memorize(reHtml), [result, scriptsArray] = await getHtml(url), container = document.getElementById(ct);
-    console.log(scriptsArray)
+    let [result, scriptsArray] = await parseHtml(url, appName), container = document.getElementById(ct);
     if (!container) {
         throw Error('the div tag with id ' + appName + ' does not exist!');
     }
@@ -219,6 +203,38 @@ async function loadHtml(ct, url, appName) {
         container.innerHTML = result;
         scriptsArray.map((item) => { sandbox(item, appName); });
     }
+}
+function parseScript(root) {
+    let scriptUrls = [], scripts = [];
+    function dfs(element) {
+        let children = element.children, parent = element.parentNode;
+        if (element.localName === "script") {
+            const src = element.getAttribute('src');
+            if (!src) {
+                let script = element.outerHTML;
+                scripts.push(script);
+            }
+            else {
+                scriptUrls.push(src);
+            }
+            let comment = document.createComment('this script is replaced by microcosmos and run in sandbox');
+            parent === null || parent === void 0 ? void 0 : parent.replaceChild(comment, element);
+        }
+        for (let i = 0; i < children.length; i++) {
+            dfs(children[i]);
+        }
+    }
+    dfs(root);
+    return [scriptUrls, scripts];
+}
+function iframeReady(iframe, iframeName) {
+    return new Promise(function (resolve, reject) {
+        window.frames[iframeName].addEventListener('DOMContentLoaded', () => {
+            let html = iframe.contentDocument || iframe.contentWindow.document;
+            console.log('ojbk')
+            resolve(html);
+        });
+    });
 }
 
 function routerChange() {
@@ -245,7 +261,6 @@ function start() {
         throw Error('are you sure you have successfully imported apps?');
     }
     else {
-        console.log(window.location.href);
         window.onhashchange = routerChange; //开启路由侦测
         window.addEventListener("cosmos_pushState", routerChange);
         window.addEventListener("cosmos_replaceState", routerChange);
