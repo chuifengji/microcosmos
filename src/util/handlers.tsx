@@ -39,7 +39,7 @@ export function patchEventListener(event: any, ListerName: string) {
     return function (this: any) {
         const e = new Event(ListerName);
         event.apply(this, arguments)
-        window.dispatchEvent(e);//TODO：事件广播发生在history state改变之前，数据不同步。函数不纯导致的问题么，害。
+        window.dispatchEvent(e);
     };
 }
 

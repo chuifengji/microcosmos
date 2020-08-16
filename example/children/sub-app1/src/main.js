@@ -11,14 +11,18 @@ Vue.use(ElementUI);
 
 
 let instance = null;
-
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app')
 export async function bootstrap() {
   console.log('react app bootstraped');
 }
 
 export async function mount(props) {
   console.log('props from main framework', props);
-  
+
   instance = new Vue({
     router,
     store,

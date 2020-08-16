@@ -1,10 +1,9 @@
-const RE_LABEL_STYLE = new RegExp(/<\s*style([\s\S]+)>([^>]*)<\s*\/style>/g);
 const RE_LABEL_SCRIPT_CONTENT = new RegExp(/(?<=<script[\s\S]*>)([\s\S]+)(?=<\/script>)/g);
-const RE_LABEL_LINK = new RegExp(/<\s*link([\s\S]+)>/g);
-const RE_LABEL_META = new RegExp(/<\s*meta([\s\S]+)>/g);
 const RE_LABEL_BODY = new RegExp(/(?<=<body[\s\S]*>)([\s\S]+)(?=<\/body>)/g);
 const RE_LABEL_SCRIPT_URL = new RegExp(/(?<=<script.*src=("|'))(.+)(?=("|')>([\s\S]*)<\/script>)/g);
 const RE_LABEL_SCRIPT = new RegExp(/<\s*script([\s\S]+)>([^>]*)<\s*\/script>/g);
+const RE_LABEL_HEAD_CONTENT = new RegExp(/(?<=<head[\s\S]*>)([\s\S]+)(?=<\/head>)/g);
+const RE_SCRIPT_URL_OUTER = new RegExp(/\/\//);
 
 function request(url, options) {
     if (!window.fetch) {
@@ -187,27 +186,22 @@ function sandbox(script, appName) {
 }
 
 async function reHtml(url) {
-    let html = await request(url), period, head = '', body = '', result = '', scriptsArray = [];
-    while ((period = RE_LABEL_LINK.exec(html)) != null) {
-        head += period[1].trim();
-    }
-    while ((period = RE_LABEL_META.exec(html)) != null) {
-        head += period[1].trim();
-    }
-    while ((period = RE_LABEL_STYLE.exec(html)) != null) {
-        head += period[1].trim();
-    }
+    let html = await request(url), period, head = '', body = '', result = '', urlArray = [], scriptsArray = [];
+    console.log(html)
     while ((period = RE_LABEL_SCRIPT_URL.exec(html)) != null) {
-        let urlArray = [];
-        urlArray.push(period[1].trim() + window.location.origin);
-        urlArray.forEach(async (item) => {
-            scriptsArray.push(await requestScript(item));
-        });
+        console.log(period)
+        RE_SCRIPT_URL_OUTER.test(period) ? urlArray.push(period)
+            : urlArray.push(url + period); //同域和不同域处理方式不同
     }
+    // console.log(urlArray)
+    urlArray.forEach(async (item) => {
+        scriptsArray.push(await requestScript(item));
+    });
     while ((period = RE_LABEL_SCRIPT_CONTENT.exec(html)) != null) {
-        scriptsArray.push(period[1].trim());
+        scriptsArray.push(period[1].trim() + "\n");
     }
     html = html.replace(RE_LABEL_SCRIPT, `<!-- this script is replaced and run in sandbox-->`);
+    head = RE_LABEL_HEAD_CONTENT.exec(html).toString() + "\n";
     body = RE_LABEL_BODY.exec(html).toString();
     result = head + body;
     return [result, scriptsArray];
@@ -217,6 +211,7 @@ async function requestScript(url) {
 }
 async function loadHtml(ct, url, appName) {
     let getHtml = memorize(reHtml), [result, scriptsArray] = await getHtml(url), container = document.getElementById(ct);
+    console.log(scriptsArray)
     if (!container) {
         throw Error('the div tag with id ' + appName + ' does not exist!');
     }
@@ -227,13 +222,14 @@ async function loadHtml(ct, url, appName) {
 }
 
 function routerChange() {
-    console.log(window.history.state);
     window.appList.forEach(item => {
-        if (item.matchRouter === window.location.hash) {
+        if (item.matchRouter === window.history.state) {
+            console.log('loadHtml ' + window.history.state);
             loadHtml(item.container, item.entry, item.name);
         }
     });
 }
+//TODO:我重写了全局的window.history方法，并进行监听，会不会对用户开放造成影响？这种路由管理方式如何嵌入子应用路由？如何缓存子应用的路由状态？
 
 window.appList = [];
 window.history.pushState = patchEventListener(window.history.pushState, "cosmos_pushState");
