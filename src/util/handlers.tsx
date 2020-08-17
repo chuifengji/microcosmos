@@ -1,3 +1,5 @@
+import { _app } from "./types";
+
 //memorize: 函数缓存
 export function memorize(fn: Function, index: number): any {
     const cache: any = {};
@@ -43,3 +45,12 @@ export function patchEventListener(event: any, ListerName: string) {
     };
 }
 
+export function findApp(list: Array<_app>, name: string): _app {
+    let n = 0;
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].name === name) {
+            n = i
+        }
+    }
+    return window.appList[n]
+}

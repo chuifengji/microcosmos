@@ -1,6 +1,7 @@
 import { createProxy } from "./proxy";
-import { memorize } from "../util/handlers"
-
+import { memorize, findApp } from "../util/handlers"
+import { checkLifecycle } from "../util/errorHandler"
+import { _app } from "../util/types"
 export function runScript(
     script: string,
     appName: string,
@@ -21,8 +22,16 @@ export function runScript(
 
 export function sandbox(script: string, appName: string) {
     let createSandbox = memorize(createProxy, 2),
-        proxyEnvir = createSandbox(window as any, null, appName);
-    let lifeCycles = runScript(script, appName, proxyEnvir);
-    console.log(lifeCycles)
+        app: _app = findApp(window.appList, appName),
+        proxyEnvir = createSandbox(window as any, null, appName),
+        lifeCycles = runScript(script, appName, proxyEnvir);
+    app.sandBox = proxyEnvir;
+    try {
+        checkLifecycle(lifeCycles, appName)
+    } catch (err) {
+        console.error(err)
+    }
+    app.bootstrap = lifeCycles.bootstrap;
+    app.mount = lifeCycles.mount;
+    app.unmount = lifeCycles.unmount;
 }
-

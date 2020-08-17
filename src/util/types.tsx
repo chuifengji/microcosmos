@@ -1,5 +1,5 @@
 //匹配路由式加载
-export type appConfigMatch = Array<{
+export type _appConfigMatch = Array<{
     name: string,
     entry: string,
     container: string,
@@ -7,23 +7,38 @@ export type appConfigMatch = Array<{
 }>
 
 //直接加载，不匹配路由
-export type appConfigDefaultLoad = Array<{
+export type _appConfigDefaultLoad = Array<{
     name: string,
     entry: string,
     container: string,
 }>
+export enum _appState {
+    BeforeBootstrap = "beforeBootstrap",
+    AfterBootstrap = "afterBootstrap",
+    BeforeMount = "beforeMount",
+    AfterMount = "aftermount",
+    BeforeUnmout = "beforeUnmout",
+    AfterUnmout = "afterUnmout",
+}
+export type _app = {
+    name: string,
+    entry: string,
+    container: string,
+    matchRouter?: string,
+    bootstrap?: Function,
+    mount?: Function,
+    unmount?: Function,
+    currentState?: _appState,
+    sandBox?: any
+}
+export type _lifecycle = {
+    bootstrap: Function,
+    mount: Function,
+    unmount: Function
+}
 //全局声明
 declare global {
     interface Window {
-        appList: Array<{
-            name: string,
-            entry: string,
-            container: string,
-            matchRouter?: string,
-            bootstrap?: Function,
-            mount?: Function,
-            unmount?: Function,
-            update?: Function
-        }>
+        appList: Array<_app>
     }
 }
