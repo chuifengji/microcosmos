@@ -8,11 +8,11 @@ export async function parseHtml(url: string, appName: string): Promise<[string, 
             scriptsArray: Array<string> = [],
             result: string = '',
             originHtml: string = await request(url),
-            periodHead = RE_LABEL_HEAD_CONTENT.exec(originHtml),
-            periodBody = RE_LABEL_BODY_CONTENT.exec(originHtml);
+            periodHead = originHtml.match(RE_LABEL_HEAD_CONTENT),
+            periodBody = originHtml.match(RE_LABEL_BODY_CONTENT);
         if (periodHead && periodBody) {
-            result += periodHead[1].toString();
-            result += periodBody[1].toString();
+            result += periodHead[0];
+            result += periodBody[0];
         }
         else { throw Error('There was an error parsing the head tag or body tag from the app named ' + appName) };
         div.innerHTML = result;
@@ -41,7 +41,6 @@ export function parseScript(root: Element): [Array<string>, Array<string>, strin
         let children = element.children,
             parent = element.parentNode;
         if (element.nodeName === "SCRIPT") {
-
             const src = element.getAttribute('src')
             if (!src) {
                 let script = element.outerHTML;

@@ -15,8 +15,7 @@ export function runScript(
         performer.call(proxyEnvir, proxyEnvir);
         return proxyEnvir[appName];
     } catch (err) {
-        console.error(`error occurred while executing the code in the sandbox`);
-        throw err
+        console.error(`error occurred while executing the code in the sandbox:` + err);
     }
 }
 
