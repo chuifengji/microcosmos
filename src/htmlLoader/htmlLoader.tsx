@@ -23,8 +23,8 @@ export async function parseHtml(url: string, appName: string): Promise<[string, 
     })
 }
 export async function loadHtml(ct: string, url: string, appName: string) {
-    // let getData = memorize(parseHtml);
-    let [result, scriptsArray] = await parseHtml(url, appName),
+    let getData = memorize(parseHtml, 1),
+        [result, scriptsArray] = await getData(url, appName),
         container = document.getElementById(ct);
     console.log(scriptsArray)
     if (!container) { throw Error('the div tag with id ' + appName + ' does not exist!') } else {
