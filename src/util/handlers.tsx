@@ -1,8 +1,8 @@
 //memorize: 函数缓存
-export function memorize(fn: Function): any {
+export function memorize(fn: Function, index: number): any {
     const cache: any = {};
-    return function ([...args]) {
-        const _args = JSON.stringify(args)
+    return function (...args) {
+        const _args = JSON.stringify(args[index])
         return cache[_args] || (cache[_args] = fn.apply(fn, args))
     }
 }
