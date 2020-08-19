@@ -55,6 +55,12 @@ export function findApp(name: string): _app {
     return window.appList[n]
 }
 
-export function isChangeApp() {
-
+export function isChangeApp(): boolean {
+    let flag = false;
+    window.appList.forEach(app => {
+        if (app.matchRouter === window.history.state) {
+            flag = true;
+        }
+    })
+    return flag
 }

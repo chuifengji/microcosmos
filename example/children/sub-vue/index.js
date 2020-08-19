@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
+Vue.config.productionTip = false
 let instance = null;
 export async function bootstrap() {
     console.log('vue app bootstraped');
@@ -15,7 +17,6 @@ export async function mount(props) {
         render: h => h(App)
     }).$mount('#app-vue')
 }
-
 
 export async function unmount() {
     // instance.$destroy();

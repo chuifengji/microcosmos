@@ -1,5 +1,5 @@
 <template>
-  <div id="container">
+  <div id="app-vue">
     <div id="nav">
       <h1>我是子应用一，sub-vue</h1>
       <router-link to="/sub-vue">子应用一:首页dsds</router-link>|||
