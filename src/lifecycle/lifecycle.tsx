@@ -1,40 +1,44 @@
 import { _app, _appState } from "../util/types"
-import { runScript } from "../sandbox/sandbox";
 import { loadHtml } from "../htmlLoader/htmlLoader";
 
 export function lifecycle() {
     window.appList.forEach(app => {
         if (app.currentState === _appState.AfterMount) {
-            _unmount(app.unmount as Function, app);
+            console.log(window.location.href)
+            _unmount(app);
         }
     })
     window.appList.forEach(app => {
         if (app.matchRouter === window.history.state) {
-            loadHtml(app.container, app.entry, app.name);
-            _boostrap(app.bootstrap as Function, app);
-            _mount(app.mount as Function, app);
+            _boostrap(app).then(res => {
+                _mount(res);
+            })
         }
     })
 }
-
-export function _boostrap(fn: Function, app: _app) {
-    app.currentState = _appState.BeforeBootstrap;
-    try {
-        let script = '(' + fn.toString() + ')()'
-        runScript(script, app.name, app.sandBox);
-        app.currentState = _appState.AfterBootstrap;
-    } catch (err) {
-        console.log(err);
+export function _boostrap(app: _app): Promise<_app> {
+    return new Promise((resolve, reject) => {
         app.currentState = _appState.BeforeBootstrap;
-    }
+        try {
+            loadHtml(app.container, app.entry, app.name).then(resApp => {
+                resApp.sandBox[resApp.name].bootstrap()
+                resApp.currentState = _appState.AfterBootstrap;
+                return resApp
+            }).then((resApp) => {
+                resolve(resApp);
+            })
+        } catch (err) {
+            console.log(err);
+            app.currentState = _appState.BeforeBootstrap;
+        }
+
+    })
 }
 
-export function _mount(fn: Function, app: _app) {
+export function _mount(app: _app) {
     app.currentState = _appState.BeforeMount
     try {
-        let script = '(' + fn.toString() + ')()'
-        runScript(script, app.name, app.sandBox);
-        fn();
+        app.sandBox[app.name].mount()
         app.currentState = _appState.AfterMount
     } catch (err) {
         console.log(err);
@@ -42,12 +46,10 @@ export function _mount(fn: Function, app: _app) {
     }
 }
 
-export function _unmount(fn: Function, app: _app) {
+export function _unmount(app: _app) {
     app.currentState = _appState.BeforeUnmout;
     try {
-        let script = '(' + fn.toString() + ')()'
-        runScript(script, app.name, app.sandBox);
-        fn();
+        app.sandBox[app.name].unmount()
         app.currentState = _appState.AfterMount
     } catch (err) {
         console.log(err);

@@ -2,18 +2,20 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App.jsx'
 
-ReactDOM.render(<App />, document.getElementById('sub-react'))
 
-export async function setup() {
-    console.log('react setup')
+
+export async function bootstrap() {
+    console.log('react bootstrap')
 }
 
-export async function mount({ host }) {
+export async function mount() {
     console.log('react mount')
-    // ReactDOM.render(<App />, document.getElementById('sub-react'))
+    ReactDOM.render(<App />, document.getElementById('app-react'))
 }
 
-export async function unmount({ host }) {
+export async function unmount() {
     console.log('react unmout')
-    ReactDOM.unmountComponentAtNode(App)
+    // ReactDOM.unmountComponentAtNode(App)
+    let root = document.getElementById('sub-react');
+    root.innerHTML = ''
 }

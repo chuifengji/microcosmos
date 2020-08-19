@@ -54,3 +54,7 @@ export function findApp(name: string): _app {
     }
     return window.appList[n]
 }
+
+export function isChangeApp() {
+
+}

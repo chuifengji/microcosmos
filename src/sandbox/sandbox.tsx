@@ -22,7 +22,7 @@ export function runScript(
 
 export function sandbox(script: string, appName: string) {
     let createSandbox = memorize(createProxy, 2),
-        app: _app = findApp(window.appList, appName),
+        app: _app = findApp(appName),
         proxyEnvir = createSandbox(window as any, null, appName),
         lifeCycles = runScript(script, appName, proxyEnvir);
     app.sandBox = proxyEnvir;
@@ -34,4 +34,5 @@ export function sandbox(script: string, appName: string) {
     app.bootstrap = lifeCycles.bootstrap;
     app.mount = lifeCycles.mount;
     app.unmount = lifeCycles.unmount;
+    console.log(window.appList)
 }

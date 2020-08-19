@@ -1,7 +1,9 @@
 import { request } from "../util/request"
 import { memorize } from "../util/handlers"
 import { sandbox } from "../sandbox/sandbox"
+import { findApp } from "../util/handlers"
 import { RE_LABEL_BODY_CONTENT, RE_LABEL_HEAD_CONTENT } from "./regex"
+import { _app } from "src/util/types"
 export async function parseHtml(url: string, appName: string): Promise<[string, Array<string>]> {
     return new Promise(async (resolve, reject) => {
         let div = document.createElement('div'),
@@ -22,15 +24,17 @@ export async function parseHtml(url: string, appName: string): Promise<[string, 
         resolve([elements, scriptsArray])
     })
 }
-export async function loadHtml(ct: string, url: string, appName: string) {
-    let getData = memorize(parseHtml, 1),
-        [result, scriptsArray] = await getData(url, appName),
-        container = document.getElementById(ct);
-    console.log(scriptsArray)
-    if (!container) { throw Error('the div tag with id ' + appName + ' does not exist!') } else {
-        container.innerHTML = result;
-        scriptsArray.map((item: string) => { sandbox(item, appName); })
-    }
+export async function loadHtml(ct: string, url: string, appName: string): Promise<_app> {
+    return new Promise(async (resolve, reject) => {
+        let getData = memorize(parseHtml, 1),
+            [result, scriptsArray] = await getData(url, appName),
+            container = document.getElementById(ct);
+        if (!container) { throw Error('the div tag with id ' + appName + ' does not exist!') } else {
+            container.innerHTML = result;
+            scriptsArray.map((item: string) => { sandbox(item, appName); })
+        }
+        resolve(findApp(appName))
+    })
 }
 
 export function parseScript(root: Element): [Array<string>, Array<string>, string] {
