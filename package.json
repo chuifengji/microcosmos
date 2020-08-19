@@ -2,7 +2,7 @@
   "name": "microcosmos",
   "version": "0.1.0",
   "description": "a micro front end frame written for fun",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"

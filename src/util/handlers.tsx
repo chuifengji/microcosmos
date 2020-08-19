@@ -54,7 +54,7 @@ export function findApp(name: string): _app {
     }
     return window.appList[n]
 }
-
+//isChangeApp: 判断当前路由变化是否是在改变app
 export function isChangeApp(): boolean {
     let flag = false;
     window.appList.forEach(app => {
@@ -64,3 +64,15 @@ export function isChangeApp(): boolean {
     })
     return flag
 }
+//firstApp：根据初次进入的路由加载app.
+export function firstApp() {
+    const router = window.location.href;
+    for (let i = 0; i < window.appList.length; i++) {
+        if (window.appList[i].matchRouter && router.indexOf(window.appList[i].matchRouter as string) > 0) {
+            return window.appList[i]
+        }
+    }
+    return false;
+}
+
+

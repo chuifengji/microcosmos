@@ -1,15 +1,12 @@
 import { _app, _appState } from "../util/types"
 import { loadHtml } from "../htmlLoader/htmlLoader";
-import { isChangeApp } from "../util/handlers"
+
 export function lifecycle() {
-    if (isChangeApp()) {
-        window.appList.forEach(app => {
-            if (app.currentState === _appState.AfterMount) {
-                console.log(window.location.href)
-                _unmount(app);
-            }
-        })
-    }
+    window.appList.forEach(app => {
+        if (app.currentState === _appState.AfterMount) {
+            _unmount(app);
+        }
+    })
     window.appList.forEach(app => {
         if (app.matchRouter === window.history.state) {
             _boostrap(app).then(res => {

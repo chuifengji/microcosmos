@@ -2,7 +2,6 @@ import React from 'react';
 
 function App() {
   function goto(title, href) {
-    console.log("title", title, "href", href)
     window.history.pushState(href, title, href);
   }
   return (
