@@ -1,7 +1,8 @@
 # microcosmos
 
 一个写着玩的微前端框架~
-呜唔，欢迎star和pr
+
+呜唔，谢谢star欢迎pr
 
 ## how to use it
 
