@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom'
 import App from './App.jsx'
 
 
+if (!window.RUNIN_MICROCOSMOS_SANDBOX) {
+    ReactDOM.render(<App />, document.getElementById('app-react'))
+}
 
 export async function bootstrap() {
     console.log('react bootstrap')

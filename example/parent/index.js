@@ -25,3 +25,16 @@ ReactDOM.render(
     </React.StrictMode>,
     document.getElementById('root')
 );
+
+// function compileCode(code) {
+//     code = 'with (sandbox) {' + code + '}';
+//     const fn = new Function('sandbox', code);
+//     return (sandbox) => {
+//       const proxy = new Proxy(sandbox, {
+//         has(target, key) {
+//           return true; // 欺骗，告知属性存在
+//         }
+//       });
+//       return fn(proxy);
+//     }
+//   }

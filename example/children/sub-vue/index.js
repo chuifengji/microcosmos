@@ -8,9 +8,7 @@ let instance = null;
 export async function bootstrap() {
     console.log('vue app bootstraped');
 }
-
-export async function mount(props) {
-    console.log('props from main framework', props);
+if (!window.RUNIN_MICROCOSMOS_SANDBOX) {
     instance = new Vue({
         router,
         store,
@@ -18,6 +16,13 @@ export async function mount(props) {
     }).$mount('#app-vue')
 }
 
+export async function mount() {
+    instance = new Vue({
+        router,
+        store,
+        render: h => h(App)
+    }).$mount('#app-vue')
+}
 export async function unmount() {
     // instance.$destroy();
     instance = null;

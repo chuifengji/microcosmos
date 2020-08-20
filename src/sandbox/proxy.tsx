@@ -34,6 +34,9 @@ export function createProxy(proxyTarget: { [key: string]: any }, onWrite: any, a
             if (propKey === 'INTERNAL_STATE_KEY') {//返回原值
                 return draftState;//TODO：不是返回 proxyTarget吗
             }
+            if (propKey === 'RUNIN_MICROCOSMOS_SANDBOX') {
+                return true;
+            }
             // 优先走已创建的代理
             if (propKey in proxiedKeyMap) {
                 return proxiedKeyMap[propKey];

@@ -7,11 +7,7 @@ export function runScript(
     appName: string,
     proxyEnvir: any,//TODO:需要类型增强
 ) {
-    const execscript: string =
-        `with(proxyEnvir.INTERNAL_STATE_KEY){
-             ${script} 
-          }`
-    const performer = new Function('proxyEnvir', execscript);
+    const performer = new Function('window', `${script}`);
     try {
         performer.call(proxyEnvir, proxyEnvir);
         return proxyEnvir[appName];
@@ -19,7 +15,6 @@ export function runScript(
         console.error(`error occurred while executing the code in the sandbox:` + err);
     }
 }
-
 export function sandbox(script: string, appName: string) {
     let createSandbox = memorize(createProxy, 2),
         app: _app = findApp(appName),
@@ -34,5 +29,4 @@ export function sandbox(script: string, appName: string) {
     app.bootstrap = lifeCycles.bootstrap;
     app.mount = lifeCycles.mount;
     app.unmount = lifeCycles.unmount;
-    console.log(window.appList)
 }
