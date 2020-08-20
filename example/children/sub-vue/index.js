@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
+// import router from './router'
 import store from './store'
 
 Vue.config.productionTip = false
@@ -10,21 +10,21 @@ export async function bootstrap() {
 }
 if (!window.RUNIN_MICROCOSMOS_SANDBOX) {
     instance = new Vue({
-        router,
+        // router,
         store,
         render: h => h(App)
     }).$mount('#app-vue')
 }
 
 export async function mount() {
+    window.ldl = 'wzx'
     instance = new Vue({
-        router,
+        // router,
         store,
         render: h => h(App)
     }).$mount('#app-vue')
 }
 export async function unmount() {
-    // instance.$destroy();
     instance = null;
     const root = document.getElementById('sub-vue')
     root.innerHTML = ''

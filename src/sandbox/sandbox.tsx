@@ -1,19 +1,22 @@
 import { createProxy } from "./proxy";
 import { memorize, findApp } from "../util/handlers"
 import { checkLifecycle } from "../util/errorHandler"
-import { _app } from "../util/types"
+import { _app, _lifecycle } from "../util/types"
 export function runScript(
     script: string,
     appName: string,
     proxyEnvir: any,//TODO:需要类型增强
-) {
-    const performer = new Function('window', `${script}`);
-    try {
-        performer.call(proxyEnvir, proxyEnvir);
-        return proxyEnvir[appName];
-    } catch (err) {
-        console.error(`error occurred while executing the code in the sandbox:` + err);
-    }
+): _lifecycle {
+    console.log(proxyEnvir)
+    const execscript =
+        `try { 
+         ${script} 
+         return window['${appName}']
+        } catch (err) {
+            console.error('error occurred while executing the code in the sandbox:' + err);
+        }`
+    const performer = new Function('window', execscript);
+    return performer.call(proxyEnvir, proxyEnvir);
 }
 export function sandbox(script: string, appName: string) {
     let createSandbox = memorize(createProxy, 2),
