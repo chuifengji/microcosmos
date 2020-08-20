@@ -39,6 +39,7 @@ export type _lifecycle = {
 //全局声明
 declare global {
     interface Window {
-        appList: Array<_app>
+        appList: Array<_app>,
+        MICROCOSMOS_ROOT_STORE: any
     }
 }

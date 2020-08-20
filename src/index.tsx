@@ -1,3 +1,3 @@
 import { register, directLoad, start } from "./app"
-
-export { register, directLoad, start }
+import { initCosmosStore } from "./store/store"
+export { register, directLoad, start, initCosmosStore }

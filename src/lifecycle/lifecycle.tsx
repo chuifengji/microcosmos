@@ -20,7 +20,7 @@ export function _boostrap(app: _app): Promise<_app> {
         app.currentState = _appState.BeforeBootstrap;
         try {
             loadHtml(app.container, app.entry, app.name).then(resApp => {
-                resApp.sandBox[resApp.name].bootstrap()
+                resApp.sandBox[resApp.name].bootstrap(window.MICROCOSMOS_ROOT_STORE)
                 resApp.currentState = _appState.AfterBootstrap;
                 return resApp
             }).then((resApp) => {
@@ -37,7 +37,7 @@ export function _boostrap(app: _app): Promise<_app> {
 export function _mount(app: _app) {
     app.currentState = _appState.BeforeMount
     try {
-        app.sandBox[app.name].mount()
+        app.sandBox[app.name].mount(window.MICROCOSMOS_ROOT_STORE)
         app.currentState = _appState.AfterMount
     } catch (err) {
         console.log(err);
@@ -48,7 +48,7 @@ export function _mount(app: _app) {
 export function _unmount(app: _app) {
     app.currentState = _appState.BeforeUnmout;
     try {
-        app.sandBox[app.name].unmount()
+        app.sandBox[app.name].unmount(window.MICROCOSMOS_ROOT_STORE)
         app.currentState = _appState.AfterMount
     } catch (err) {
         console.log(err);

@@ -1,10 +1,11 @@
 import { _appConfigMatch, _appConfigDefaultLoad } from "./util/types"
 import { routerChange } from "./router/routerHandler"
-import { loadHtml } from "./htmlLoader/htmlLoader"
 import { patchEventListener, firstApp } from "./util/handlers"
+
 window.appList = [];
 window.history.pushState = patchEventListener(window.history.pushState, "cosmos_pushState");
 window.history.replaceState = patchEventListener(window.history.replaceState, "cosmos_replaceState");
+
 export function register(apps: _appConfigMatch) {
     apps.forEach(item => window.appList.push(item))
 }

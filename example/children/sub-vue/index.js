@@ -16,8 +16,7 @@ if (!window.RUNIN_MICROCOSMOS_SANDBOX) {
     }).$mount('#app-vue')
 }
 
-export async function mount() {
-    window.ldl = 'wzx'
+export async function mount(rootStore) {
     instance = new Vue({
         // router,
         store,

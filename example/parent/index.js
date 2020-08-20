@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.jsx';
-import { start, register } from '../../dist/microcosmos';
+import { start, register, initCosmosStore } from '../../dist/microcosmos';
+
+initCosmosStore({ name: 'chuifengji' })
 
 register([
     {
