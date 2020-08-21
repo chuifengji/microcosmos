@@ -68,7 +68,7 @@ function App() {
 
 `bootstrap、mount、unmount`
 
-```
+```js
 export async function bootstrap() {
     console.log('react bootstrap')
 }
@@ -82,6 +82,47 @@ export async function unmount() {
     console.log('react unmout')
     let root = document.getElementById('sub-react');
     root.innerHTML = ''
+}
+```
+
+**全局状态通信/存储**
+
+应用之间通信的场景其实较少，所以全局Store设计的也很简单。
+
+在主应用中：
+
+- initCosmosStore:初始化store
+- subscribeStore:监听store变化
+- changeStore：给store派发新值
+- getStore：获取store当前快照
+
+```js
+let store = initCosmosStore({ name: 'chuifengji' })
+
+store.subscribeStore((n, o) => {
+    console.log(n, o);
+})
+
+store.changeStore({ name: 'wzx' })
+
+store.getStore();
+
+```
+
+在子应用中：
+
+```js
+export async function mount(rootStore) {
+    rootStore.store.subscribeStore((newValue, oldValue) => {
+        console.log(newValue, oldValue);
+    })
+    rootStore.changeStore({ name: 'wzx' })
+    rootStore.getStore();
+    instance = new Vue({
+        // router,
+        store,
+        render: h => h(App)
+    }).$mount('#app-vue')
 }
 ```
 

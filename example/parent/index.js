@@ -3,8 +3,15 @@ import ReactDOM from 'react-dom';
 import App from './App.jsx';
 import { start, register, initCosmosStore } from '../../dist/microcosmos';
 
-initCosmosStore({ name: 'chuifengji' })
+let store = initCosmosStore({ name: 'chuifengji' })
 
+store.subscribeStore((n, o) => {
+    console.log(n, o);
+})
+
+store.changeStore({ name: 'wzx' })
+
+store.getStore();
 register([
     {
         name: 'sub-react',
