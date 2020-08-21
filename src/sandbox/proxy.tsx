@@ -1,42 +1,52 @@
 import { isObject, isArray, getCleanCopy } from "../util/handlers"
-import { copyOnWrite, copy } from "./copyOnWrite"
+import { copyOnWrite, copyProp } from "./copyOnWrite"
 
-function getTarget(draftState: any) {
-    return draftState.mutated ? draftState.draftValue : draftState.originalValue;
+function proxyProp(propValue, propKey, hostDraftState) {
+    const { originalValue, draftValue, onWrite } = hostDraftState;
+    return createProxy(propValue, (value) => {
+        if (!draftValue.mutated) {
+            hostDraftState.mutated = true;
+            // 拷贝host所有属性
+            copyProp(draftValue, originalValue);
+        }
+        draftValue[propKey] = value;
+        if (onWrite) {
+            onWrite(draftValue);
+        }
+    });
 }
 
 export function createProxy(proxyTarget: { [key: string]: any }, onWrite: any, appName?: string) {
     const draftValue = isArray(proxyTarget) ? [] : getCleanCopy(proxyTarget)
     let proxiedKeyMap = Object.create(null)
     let draftState = {
-        proxyTarget,
+        originalValue: proxyTarget,
         draftValue,
         onWrite,
+        mutated: false,
     }
     return new Proxy(proxyTarget, {
         get(
-            target: { [key: string]: any }, propKey: string
+            target: { [key: string]: any }, propKey: string, receiver
         ) {
             if (propKey === 'RUNIN_MICROCOSMOS_SANDBOX') return true
             if (propKey in proxiedKeyMap) return proxiedKeyMap[propKey]
             if (isObject(proxyTarget[propKey]) || isArray(proxyTarget[propKey])) {
-                proxiedKeyMap[propKey] = createProxy(
-                    proxyTarget[propKey],
-                    (obj: Record<string, unknown>) => (draftValue[propKey] = obj)
-                )
+                proxiedKeyMap[propKey] = proxyProp(proxyTarget[propKey], propKey, draftState);
                 return proxiedKeyMap[propKey]
             } else {
+                // if (draftState.mutated) {
+                //     return draftValue[propKey];
+                // }
+                // return Reflect.get(target, propKey, receiver);
                 return draftValue[propKey] || target[propKey]
             }
         },
         set(target, propKey: string, value) {
             if (isObject(proxyTarget[propKey]) || isArray(proxyTarget[propKey])) {
-                proxiedKeyMap[propKey] = createProxy(
-                    value,
-                    (obj: Record<string, unknown>) => (draftValue[propKey] = obj)
-                )
+                proxiedKeyMap[propKey] = proxyProp(value, propKey, draftState);
             }
-            onWrite && onWrite(draftState.onWrite)
+            copyOnWrite(draftState);
             draftValue[propKey] = value
             return true
         }

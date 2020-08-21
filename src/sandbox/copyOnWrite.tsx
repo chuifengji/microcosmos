@@ -1,34 +1,57 @@
-// 跳过target身上已有的属性
-export function copy(target: any, source: any) {
+function getOwnPropertyDescriptors(target: any) {
+    const res: any = {}
+    Reflect.ownKeys(target).forEach(key => {
+        res[key] = Object.getOwnPropertyDescriptor(target, key)
+    })
+    return res
+}
+
+export function copyProp(target: any, source: any) {
     if (Array.isArray(target)) {
         for (let i = 0; i < source.length; i++) {
-            // 跳过在更深层已经被改过的属性
             if (!(i in target)) {
                 target[i] = source[i];
             }
         }
     }
     else {
-        //Reflect.ownKeys 返回对象所有属性名
-        Reflect.ownKeys(source).forEach(key => {
-            const desc = Object.getOwnPropertyDescriptor(source, key);
-            // 跳过已有属性
-            if (!(key in target)) {
-                Object.defineProperty(target, key, desc as PropertyDescriptor);
+        const descriptors = getOwnPropertyDescriptors(source)
+        //delete descriptors[DRAFT_STATE as any]
+        let keys = Reflect.ownKeys(descriptors)
+        for (let i = 0; i < keys.length; i++) {
+            const key: any = keys[i]
+            const desc = descriptors[key]
+            if (desc.writable === false) {
+                desc.writable = true
+                desc.configurable = true
             }
-        });
+            if (desc.get || desc.set)
+                descriptors[key] = {
+                    configurable: true,
+                    writable: true, // could live with !!desc.set as well here...
+                    enumerable: desc.enumerable,
+                    value: source[key]
+                }
+        }
+        target = Object.create(Object.getPrototypeOf(source), descriptors)
+        console.log(target)
     }
 }
 
-export function copyOnWrite(draftState: any) {
+export function copyOnWrite(draftState: {
+    originalValue: {
+        [key: string]: any;
+    };
+    draftValue: any;
+    onWrite: any;
+    mutated: boolean;
+}) {
     const { originalValue, draftValue, mutated, onWrite } = draftState;
     if (!mutated) {
         draftState.mutated = true;
-        // 下一层有修改时才往父级 draftValue 上挂
         if (onWrite) {
             onWrite(draftValue);
         }
-        // 第一次写时复制
-        copy(draftValue, originalValue);
+        copyProp(draftValue, originalValue);
     }
 }
