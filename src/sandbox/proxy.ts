@@ -34,7 +34,13 @@ export function createProxy(proxyTarget: { [key: string]: any }, onWrite: any, a
             if (isObject(proxyTarget[propKey]) || isArray(proxyTarget[propKey])) {
                 proxiedKeyMap[propKey] = proxyProp(proxyTarget[propKey], propKey, draftState);
                 return proxiedKeyMap[propKey]
-            } else {
+            }
+            else if (typeof draftValue[propKey] === 'function') {
+                return draftValue[propKey].bind(proxyTarget)
+            } else if (typeof target[propKey] === 'function') {
+                return target[propKey].bind(proxyTarget)
+            }
+            else {
                 // if (draftState.mutated) {
                 //     return draftValue[propKey];
                 // }

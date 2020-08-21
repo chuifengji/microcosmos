@@ -17,7 +17,7 @@ if (!window.RUNIN_MICROCOSMOS_SANDBOX) {
 }
 
 export async function mount(rootStore) {
-    console.log(window.history.state)
+    console.log(window.addEventListener)
     rootStore.subscribeStore((newValue, oldValue) => {
         console.log(newValue, oldValue);
     })

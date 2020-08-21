@@ -2,7 +2,7 @@ import typescript from 'rollup-plugin-typescript2'
 import replace from '@rollup/plugin-replace'
 
 export default {
-    input: 'src/index.tsx',
+    input: 'src/index.ts',
     output: [
         {
             file: 'dist/microcosmos.js',
