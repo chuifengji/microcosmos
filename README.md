@@ -99,8 +99,8 @@ export async function unmount() {
 ```js
 let store = initCosmosStore({ name: 'chuifengji' })
 
-store.subscribeStore((n, o) => {
-    console.log(n, o);
+store.subscribeStore((newValue, oldValue) => {
+    console.log(newValue, oldValue);
 })
 
 store.changeStore({ name: 'wzx' })
