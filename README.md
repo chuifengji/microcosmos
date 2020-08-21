@@ -113,7 +113,7 @@ store.getStore();
 
 ```js
 export async function mount(rootStore) {
-    rootStore.store.subscribeStore((newValue, oldValue) => {
+    rootStore.subscribeStore((newValue, oldValue) => {
         console.log(newValue, oldValue);
     })
     rootStore.changeStore({ name: 'wzx' })
