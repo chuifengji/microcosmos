@@ -17,7 +17,8 @@ register([
         name: 'sub-react',
         entry: "http://localhost:3001",
         container: "sub-react",
-        matchRouter: "/sub-react"
+        // matchRouter: "/sub-react",
+        ss: 's'
     },
     {
         name: 'sub-vue',

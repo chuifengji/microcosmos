@@ -2,6 +2,16 @@
 
 一个写着玩的微前端框架~
 
+
+## :facepunch: Feature
+
+- Html-loader
+- Dynamaic-css
+- Js-sandbox
+- Lifecycle
+- Parent-Child Communication
+- Prefetch
+
 呜唔，谢谢star欢迎pr
 
 ## how to use it

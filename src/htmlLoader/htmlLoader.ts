@@ -7,7 +7,6 @@ export let parseHtml = (async function () {
     let cache: any = {};
     return async function (url: string, appName: string): Promise<[string, Array<string>]> {
         const _arg = Array.prototype.join.call(arguments, ',')
-        console.log(cache)
         if (cache[_arg]) { return cache[_arg] }
         let div = document.createElement('div'),
             scriptsArray: Array<string> = [],

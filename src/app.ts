@@ -2,15 +2,16 @@ import { _appConfigMatch, _appConfigDefaultLoad } from "./util/types"
 import { routerChange } from "./router/routerHandler"
 import { patchEventListener, firstApp } from "./util/handlers"
 import { prefetch } from "./htmlLoader/prefetch"
+import { checkAppRegister, checkAppDirect } from "./util/errorHandler"
 window.appList = [];
 window.history.pushState = patchEventListener(window.history.pushState, "cosmos_pushState");
 window.history.replaceState = patchEventListener(window.history.replaceState, "cosmos_replaceState");
 
 export function register(apps: _appConfigMatch) {
-    apps.forEach(item => window.appList.push(item))
+    apps.forEach(app => checkAppRegister(app) ? window.appList.push(app) : false)
 }
 export function directLoad(apps: _appConfigDefaultLoad) {
-    apps.forEach(item => window.appList.push(item))
+    apps.forEach(app => checkAppDirect(app) ? window.appList.push(app) : false)
 }
 
 export function start(): void {
@@ -22,8 +23,7 @@ export function start(): void {
         const app = firstApp();
         app ? window.history.pushState(app.matchRouter as string, app.name, app.matchRouter as string) : false
         window._last_cosmos_url = window.location.href;
-        prefetch()
+        prefetch();
     }
 }
-
 
