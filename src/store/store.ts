@@ -6,9 +6,14 @@ export function initCosmosStore(initData) {
             return store;
         }
         function changeStore(newValue) {
-            let oldValue = store;
-            store = newValue;
-            observers.forEach(fn => fn(newValue, oldValue));
+            return new Promise((resolve, reject) => {
+                if (newValue !== store) {
+                    let oldValue = store;
+                    store = newValue;
+                    resolve(store);
+                    observers.forEach(fn => fn(newValue, oldValue));
+                }
+            })
         }
         function subscribeStore(fn) {
             observers.push(fn);

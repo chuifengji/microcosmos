@@ -5,9 +5,9 @@ import { start, register, initCosmosStore } from '../../dist/microcosmos';
 
 let store = initCosmosStore({ name: 'chuifengji' })
 
-store.subscribeStore((n, o) => {
-    console.log(n, o);
-})
+// store.subscribeStore((n, o) => {
+//     console.log(n, o);
+// })
 
 store.changeStore({ name: 'wzx' })
 
