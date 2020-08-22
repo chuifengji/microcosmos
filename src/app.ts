@@ -5,7 +5,7 @@ import { patchEventListener, firstApp } from "./util/handlers"
 window.appList = [];
 window.history.pushState = patchEventListener(window.history.pushState, "cosmos_pushState");
 window.history.replaceState = patchEventListener(window.history.replaceState, "cosmos_replaceState");
-
+window._last_cosmos_url = window.location.href;
 export function register(apps: _appConfigMatch) {
     apps.forEach(item => window.appList.push(item))
 }

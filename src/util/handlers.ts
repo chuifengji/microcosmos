@@ -57,6 +57,8 @@ export function findApp(name: string): _app {
 //isChangeApp: 判断当前路由变化是否是在改变app
 export function isChangeApp(): boolean {
     let flag = false;
+    if (window._last_cosmos_url === window.location.href) return false;
+    window._last_cosmos_url = window.location.href;
     window.appList.forEach(app => {
         if (app.matchRouter === window.history.state) {
             flag = true;

@@ -1,6 +1,6 @@
 {
   "name": "microcosmos",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "a micro front end frame written for fun",
   "main": "dist/microcosmos.js",
   "scripts": {

@@ -40,6 +40,7 @@ export type _lifecycle = {
 declare global {
     interface Window {
         appList: Array<_app>,
-        MICROCOSMOS_ROOT_STORE: any
+        MICROCOSMOS_ROOT_STORE: any,
+        _last_cosmos_url: string
     }
 }
