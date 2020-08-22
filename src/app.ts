@@ -1,7 +1,7 @@
 import { _appConfigMatch, _appConfigDefaultLoad } from "./util/types"
 import { routerChange } from "./router/routerHandler"
 import { patchEventListener, firstApp } from "./util/handlers"
-
+import { prefetch } from "./htmlLoader/prefetch"
 window.appList = [];
 window.history.pushState = patchEventListener(window.history.pushState, "cosmos_pushState");
 window.history.replaceState = patchEventListener(window.history.replaceState, "cosmos_replaceState");
@@ -22,6 +22,7 @@ export function start(): void {
         const app = firstApp();
         app ? window.history.pushState(app.matchRouter as string, app.name, app.matchRouter as string) : false
         window._last_cosmos_url = window.location.href;
+        prefetch()
     }
 }
 

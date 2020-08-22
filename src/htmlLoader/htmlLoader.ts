@@ -3,7 +3,7 @@ import { sandbox } from "../sandbox/sandbox"
 import { findApp } from "../util/handlers"
 import { RE_LABEL_BODY_CONTENT, RE_LABEL_HEAD_CONTENT } from "./regex"
 import { _app } from "src/util/types"
-let parseHtml = (async function () {
+export let parseHtml = (async function () {
     let cache: any = {};
     return async function (url: string, appName: string): Promise<[string, Array<string>]> {
         const _arg = Array.prototype.join.call(arguments, ',')
