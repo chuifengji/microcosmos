@@ -18,10 +18,10 @@ if (!window.RUNIN_MICROCOSMOS_SANDBOX) {
 
 export async function mount(rootStore) {
     console.log(window.addEventListener)
-    rootStore.subscribeStore((newValue, oldValue) => {
-        console.log(newValue, oldValue);
-    })
-    rootStore.changeStore({ name: 'wz' }).then(res => console.log(res))
+    // rootStore.subscribeStore((newValue, oldValue) => {
+    //     console.log(newValue, oldValue);
+    // })
+    // rootStore.changeStore({ name: 'wz' }).then(res => console.log(res))
     rootStore.getStore();
     instance = new Vue({
         router,

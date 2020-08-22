@@ -1,14 +1,5 @@
 import { _app } from "./types";
 
-//memorize: 函数缓存
-export function memorize(fn: Function, index: number): any {
-    const cache: any = {};
-    return function (...args) {
-        const _args = JSON.stringify(args[index])
-        return cache[_args] || (cache[_args] = fn.apply(fn, args))
-    }
-}
-
 //compose: 函数组合
 export function compose(f: Function, g: Function) {
     return function (x: any) {
