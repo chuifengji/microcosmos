@@ -5,7 +5,7 @@ import { patchEventListener, firstApp } from "./util/handlers"
 window.appList = [];
 window.history.pushState = patchEventListener(window.history.pushState, "cosmos_pushState");
 window.history.replaceState = patchEventListener(window.history.replaceState, "cosmos_replaceState");
-window._last_cosmos_url = window.location.href;
+
 export function register(apps: _appConfigMatch) {
     apps.forEach(item => window.appList.push(item))
 }
@@ -21,6 +21,7 @@ export function start(): void {
         window.appList.forEach(app => { !app.matchRouter ? window.history.pushState(app.matchRouter as string, app.name, app.matchRouter as string) : false })
         const app = firstApp();
         app ? window.history.pushState(app.matchRouter as string, app.name, app.matchRouter as string) : false
+        window._last_cosmos_url = window.location.href;
     }
 }
 
