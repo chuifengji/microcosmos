@@ -13,7 +13,7 @@
 ```js
 npm i microcosmos
 
-import { start, register } from 'microcosmos';
+import { start, register,initCosmosStore } from 'microcosmos';
 ```
 
 **注册子应用**
