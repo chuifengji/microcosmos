@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App.jsx'
-
+import "./index.css"
 
 if (!window.RUNIN_MICROCOSMOS_SANDBOX) {
     ReactDOM.render(<App />, document.getElementById('app-react'))

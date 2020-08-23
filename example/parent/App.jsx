@@ -5,13 +5,11 @@ function App() {
     window.history.pushState(href, title, href);
   }
   return (
-    <div>
-      <nav>
-        <ol>
-          <li onClick={(e) => goto('sub-vue', '/sub-vue')}><a>子应用一</a></li>
-          <li onClick={(e) => goto('sub-react', '/sub-react')}><a >子应用二</a></li>
-        </ol>
-      </nav>
+    <div >
+      <div className='parent_header' >
+        <button className='parent_button' onClick={(e) => goto('sub-vue', '/sub-vue')}><a>子应用-vue</a></button>
+        <button className='parent_button' onClick={(e) => goto('sub-react', '/sub-react')}><a >子应用-react</a></button>
+      </div>
       <div id="sub-vue"></div>
       <div id="sub-react"></div>
     </div>

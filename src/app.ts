@@ -27,3 +27,4 @@ export function start(): void {
     }
 }
 
+//网速较慢时，点击会出现多个子应用同时存在的状况。

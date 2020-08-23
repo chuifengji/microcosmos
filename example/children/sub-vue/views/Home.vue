@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    <HelloWorld msg="Welcome to Home by sub-app-vue" />
+  <div class="vue-home">
+    <HelloWorld msg="this is home page by vue app" />
   </div>
 </template>
 
@@ -13,3 +13,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.vue-home {
+  text-align: center;
+}
+</style>
