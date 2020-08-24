@@ -11,7 +11,7 @@ export async function prefetch() {
 }
 
 function getPieces(arr, count) {
-    if (count < 1) throw 'count must greatter than 0'
+    if (count < 1) throw 'count must greater than 0'
   
     const result = Array(Math.ceil(arr.length / count)).fill([]).map(v => v.slice())
     for (let i = 0, j = 0; i < arr.length; i++) {
