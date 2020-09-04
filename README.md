@@ -11,7 +11,7 @@
   </a>
 </p>
 
-> 一个写着玩的微前端框架
+> 一个写着玩的微前端容器
 
 ### 🏠 [GitHub Homepage](https://github.com/chuifengji/microcosmos)
 
